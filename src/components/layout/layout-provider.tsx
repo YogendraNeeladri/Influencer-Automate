@@ -1,3 +1,4 @@
+
 'use client';
 
 import { usePathname } from 'next/navigation';
@@ -7,7 +8,7 @@ import { AppSidebarContent } from '@/components/layout/app-sidebar';
 export function LayoutProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
-  if (pathname === '/login') {
+  if (pathname === '/login' || pathname === '/register') {
     return <>{children}</>;
   }
 

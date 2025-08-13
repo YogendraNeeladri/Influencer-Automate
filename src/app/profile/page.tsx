@@ -21,6 +21,15 @@ export default function ProfilePage() {
     const { toast } = useToast();
     const [state, formAction] = useFormState(updateProfile, initialState);
     const formRef = useRef<HTMLFormElement>(null);
+    
+    // In a real application, you would fetch this data from your authentication provider.
+    const user = {
+        name: 'Jane Doe',
+        email: 'jane.doe@example.com',
+        avatar: 'https://placehold.co/80x80.png',
+        fallback: 'JD',
+        bio: 'Marketing Manager at Influencer Automate.',
+    };
 
     useEffect(() => {
         if (state?.error) {
@@ -51,19 +60,19 @@ export default function ProfilePage() {
                     <form ref={formRef} action={formAction} className="space-y-6">
                         <div className="flex items-center space-x-4">
                             <Avatar className="w-20 h-20">
-                                <AvatarImage src="https://placehold.co/80x80.png" alt="@janedoe" data-ai-hint="person" />
-                                <AvatarFallback>JD</AvatarFallback>
+                                <AvatarImage src={user.avatar} alt={user.name} data-ai-hint="person" />
+                                <AvatarFallback>{user.fallback}</AvatarFallback>
                             </Avatar>
                             <Button variant="outline" type="button">Change Photo</Button>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="name">Name</Label>
-                                <Input id="name" name="name" defaultValue="Jane Doe" />
+                                <Input id="name" name="name" defaultValue={user.name} />
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="email">Email</Label>
-                                <Input id="email" name="email" type="email" defaultValue="jane.doe@example.com" />
+                                <Input id="email" name="email" type="email" defaultValue={user.email} />
                             </div>
                         </div>
                          <div className="space-y-2">
@@ -73,7 +82,7 @@ export default function ProfilePage() {
                                 name="bio"
                                 className="flex min-h-[80px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                                 placeholder="Tell us a little about yourself"
-                                defaultValue="Marketing Manager at Influencer Automate."
+                                defaultValue={user.bio}
                             />
                         </div>
                         <SubmitButton />
