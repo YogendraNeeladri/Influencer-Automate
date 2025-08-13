@@ -11,9 +11,10 @@ import {
   SidebarFooter,
 } from '@/components/ui/sidebar';
 import { Separator } from '@/components/ui/separator';
-import { Home, Users, BarChart2, Send, Share2 } from 'lucide-react';
+import { Home, Users, BarChart2, Send, Share2, User, LogOut } from 'lucide-react';
 import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '../ui/dropdown-menu';
 
 export function AppSidebarContent() {
   const pathname = usePathname();
@@ -51,16 +52,37 @@ export function AppSidebarContent() {
       </SidebarContent>
       <SidebarFooter className="group-data-[collapsible=icon]:hidden">
         <Separator className="my-2 bg-sidebar-border" />
-        <div className="flex items-center gap-3 p-2">
-            <Avatar className="w-8 h-8">
-                <AvatarImage src="https://placehold.co/40x40.png" alt="@jane" data-ai-hint="person" />
-                <AvatarFallback>JD</AvatarFallback>
-            </Avatar>
-            <div className="flex flex-col">
-                <span className="text-sm font-semibold text-sidebar-foreground">Jane Doe</span>
-                <span className="text-xs text-sidebar-foreground/70">jane.doe@example.com</span>
-            </div>
-        </div>
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <button className="flex items-center gap-3 p-2 w-full text-left rounded-md hover:bg-sidebar-accent">
+                    <Avatar className="w-8 h-8">
+                        <AvatarImage src="https://placehold.co/40x40.png" alt="@jane" data-ai-hint="person" />
+                        <AvatarFallback>JD</AvatarFallback>
+                    </Avatar>
+                    <div className="flex flex-col">
+                        <span className="text-sm font-semibold text-sidebar-foreground">Jane Doe</span>
+                        <span className="text-xs text-sidebar-foreground/70">jane.doe@example.com</span>
+                    </div>
+                </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56 mb-2 ml-2" side="top" align="start">
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                    <Link href="/profile">
+                        <User className="mr-2 h-4 w-4" />
+                        <span>Profile</span>
+                    </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                    <Link href="/login">
+                        <LogOut className="mr-2 h-4 w-4" />
+                        <span>Log out</span>
+                    </Link>
+                </DropdownMenuItem>
+            </DropdownMenuContent>
+        </DropdownMenu>
       </SidebarFooter>
     </>
   );
