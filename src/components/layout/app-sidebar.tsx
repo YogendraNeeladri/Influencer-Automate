@@ -16,6 +16,14 @@ import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '../ui/dropdown-menu';
 
+// In a real application, you would fetch this data from your authentication provider.
+const user = {
+    name: 'Jane Doe',
+    email: 'jane.doe@example.com',
+    avatar: 'https://placehold.co/40x40.png',
+    fallback: 'JD',
+};
+
 export function AppSidebarContent() {
   const pathname = usePathname();
 
@@ -56,12 +64,12 @@ export function AppSidebarContent() {
             <DropdownMenuTrigger asChild>
                 <button className="flex items-center gap-3 p-2 w-full text-left rounded-md hover:bg-sidebar-accent">
                     <Avatar className="w-8 h-8">
-                        <AvatarImage src="https://placehold.co/40x40.png" alt="@jane" data-ai-hint="person" />
-                        <AvatarFallback>JD</AvatarFallback>
+                        <AvatarImage src={user.avatar} alt={user.name} data-ai-hint="person" />
+                        <AvatarFallback>{user.fallback}</AvatarFallback>
                     </Avatar>
                     <div className="flex flex-col">
-                        <span className="text-sm font-semibold text-sidebar-foreground">Jane Doe</span>
-                        <span className="text-xs text-sidebar-foreground/70">jane.doe@example.com</span>
+                        <span className="text-sm font-semibold text-sidebar-foreground">{user.name}</span>
+                        <span className="text-xs text-sidebar-foreground/70">{user.email}</span>
                     </div>
                 </button>
             </DropdownMenuTrigger>
