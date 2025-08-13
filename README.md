@@ -2,6 +2,8 @@
 
 This is a Next.js application built with Firebase Studio. Influencer Automate is a powerful tool designed to streamline influencer marketing campaigns through AI-powered automation.
 
+[**View Live Demo**](https://influencer-automate-oahc.vercel.app/)
+
 ## Core Features
 
 -   **Influencer Data Extraction**: Pull public data from creators’ YouTube and Instagram profiles.
