@@ -19,6 +19,9 @@ This is a Next.js application built with Firebase Studio. Influencer Automate is
 -   **AI Integration**: [Genkit](https://firebase.google.com/docs/genkit)
 -   **Language**: [TypeScript](https://www.typescriptlang.org/)
 
+##make a .env file
+using GeminiApiKey="" 
+
 ## Getting Started
 
 To get the development server running:
