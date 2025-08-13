@@ -1,6 +1,7 @@
+
 'use client';
 
-import { useFormState, useFormStatus } from 'react-dom';
+import { useActionState, useFormStatus } from 'react';
 import { getAnalysisSummary } from '@/lib/actions';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
@@ -26,7 +27,7 @@ function SubmitButton() {
 }
 
 export function AnalysisForm() {
-  const [state, formAction] = useFormState(getAnalysisSummary, initialState);
+  const [state, formAction] = useActionState(getAnalysisSummary, initialState);
   const { pending } = useFormStatus();
   const { toast } = useToast();
   const formRef = useRef<HTMLFormElement>(null);

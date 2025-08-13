@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useFormState } from 'react-dom';
+import { useActionState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,7 +22,7 @@ const initialState = {
 export default function ProfilePage() {
     const { toast } = useToast();
     const { user, updateUser } = useUser();
-    const [state, formAction] = useFormState(updateProfile, initialState);
+    const [state, formAction] = useActionState(updateProfile, initialState);
     
     useEffect(() => {
         if (state?.error) {
