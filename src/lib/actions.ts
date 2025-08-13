@@ -86,6 +86,7 @@ export async function updateProfile(prevState: any, formData: FormData) {
         return {
             error: Object.values(validatedFields.error.flatten().fieldErrors).flat()[0] || 'Invalid input.',
             message: '',
+            data: null,
         };
     }
 
@@ -95,6 +96,9 @@ export async function updateProfile(prevState: any, formData: FormData) {
     return { 
         message: 'Profile updated successfully!',
         error: '',
-        data: validatedFields.data,
+        data: {
+            ...validatedFields.data,
+            fallback: validatedFields.data.name.charAt(0).toUpperCase()
+        },
      };
 }

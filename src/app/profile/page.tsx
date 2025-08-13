@@ -9,8 +9,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { updateProfile } from '@/lib/actions';
 import { useToast } from '@/hooks/use-toast';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect } from 'react';
 import { SubmitButton } from '@/components/profile/submit-button';
+import { useUser } from '@/context/user-context';
 
 const initialState = {
     message: '',
@@ -20,17 +21,9 @@ const initialState = {
 
 export default function ProfilePage() {
     const { toast } = useToast();
+    const { user, updateUser } = useUser();
     const [state, formAction] = useFormState(updateProfile, initialState);
     
-    // In a real application, you would fetch this data from your authentication provider.
-    const [user, setUser] = useState({
-        name: 'Yogi',
-        email: 'yogi@example.com',
-        avatar: 'https://placehold.co/80x80.png',
-        fallback: 'Y',
-        bio: 'Marketing Manager at Influencer Automate.',
-    });
-
     useEffect(() => {
         if (state?.error) {
             toast({
@@ -39,17 +32,28 @@ export default function ProfilePage() {
                 description: state.error,
             });
         }
-        if (state?.message) {
+        if (state?.message && state.data) {
             toast({
                 title: "Success",
                 description: state.message,
             });
-            if (state.data) {
-                setUser(prevUser => ({...prevUser, ...state.data}));
-            }
+            updateUser(state.data);
         }
-    }, [state, toast]);
+    }, [state, toast, updateUser]);
 
+    if (!user) {
+        return (
+             <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
+                <h2 className="text-3xl font-bold tracking-tight">Profile</h2>
+                 <Card>
+                    <CardHeader>
+                        <CardTitle>Please Log In</CardTitle>
+                        <CardDescription>You need to be logged in to view your profile.</CardDescription>
+                    </CardHeader>
+                </Card>
+            </div>
+        )
+    }
 
     return (
         <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">

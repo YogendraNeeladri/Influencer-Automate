@@ -1,12 +1,36 @@
 
+'use client';
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useUser } from "@/context/user-context";
 import { Share2 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { FormEvent } from "react";
 
 export default function LoginPage() {
+  const { login } = useUser();
+  const router = useRouter();
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const email = formData.get('email') as string;
+    const name = email.split('@')[0]; // Simple name extraction from email
+    
+    login({
+      name: name.charAt(0).toUpperCase() + name.slice(1),
+      email: email,
+      avatar: 'https://placehold.co/80x80.png',
+      fallback: name.charAt(0).toUpperCase(),
+      bio: '',
+    });
+    router.push('/');
+  };
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-background">
       <Card className="mx-auto max-w-sm">
@@ -20,7 +44,7 @@ export default function LoginPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form action="/">
+          <form onSubmit={handleSubmit}>
             <div className="grid gap-4">
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
@@ -49,7 +73,7 @@ export default function LoginPage() {
                 Login
               </Button>
               <Button variant="outline" className="w-full" asChild>
-                <Link href="/">Login with Google</Link>
+                <Link href="#">Login with Google</Link>
               </Button>
             </div>
           </form>

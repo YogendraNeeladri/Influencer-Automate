@@ -15,17 +15,12 @@ import { Home, Users, BarChart2, Send, Share2, User, LogOut } from 'lucide-react
 import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '../ui/dropdown-menu';
+import { useUser } from '@/context/user-context';
 
-// In a real application, you would fetch this data from your authentication provider.
-const user = {
-    name: 'Yogi',
-    email: 'yogi@example.com',
-    avatar: 'https://placehold.co/40x40.png',
-    fallback: 'Y',
-};
 
 export function AppSidebarContent() {
   const pathname = usePathname();
+  const { user, logout } = useUser();
 
   const menuItems = [
     { href: '/', label: 'Dashboard', icon: Home, tooltip: 'Dashboard' },
@@ -60,37 +55,46 @@ export function AppSidebarContent() {
       </SidebarContent>
       <SidebarFooter className="group-data-[collapsible=icon]:hidden">
         <Separator className="my-2 bg-sidebar-border" />
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <button className="flex items-center gap-3 p-2 w-full text-left rounded-md hover:bg-sidebar-accent">
-                    <Avatar className="w-8 h-8">
-                        <AvatarImage src={user.avatar} alt={user.name} data-ai-hint="person" />
-                        <AvatarFallback>{user.fallback}</AvatarFallback>
-                    </Avatar>
-                    <div className="flex flex-col">
-                        <span className="text-sm font-semibold text-sidebar-foreground">{user.name}</span>
-                        <span className="text-xs text-sidebar-foreground/70">{user.email}</span>
-                    </div>
-                </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56 mb-2 ml-2" side="top" align="start">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                    <Link href="/profile">
-                        <User className="mr-2 h-4 w-4" />
-                        <span>Profile</span>
-                    </Link>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                    <Link href="/login">
+        {user ? (
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <button className="flex items-center gap-3 p-2 w-full text-left rounded-md hover:bg-sidebar-accent">
+                        <Avatar className="w-8 h-8">
+                            <AvatarImage src={user.avatar} alt={user.name} data-ai-hint="person" />
+                            <AvatarFallback>{user.fallback}</AvatarFallback>
+                        </Avatar>
+                        <div className="flex flex-col">
+                            <span className="text-sm font-semibold text-sidebar-foreground">{user.name}</span>
+                            <span className="text-xs text-sidebar-foreground/70">{user.email}</span>
+                        </div>
+                    </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56 mb-2 ml-2" side="top" align="start">
+                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                        <Link href="/profile">
+                            <User className="mr-2 h-4 w-4" />
+                            <span>Profile</span>
+                        </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={logout}>
                         <LogOut className="mr-2 h-4 w-4" />
                         <span>Log out</span>
+                    </DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
+        ) : (
+             <div className="p-2">
+                <SidebarMenuButton asChild>
+                     <Link href="/login">
+                        <LogOut className="mr-2 h-4 w-4" />
+                        <span>Log in</span>
                     </Link>
-                </DropdownMenuItem>
-            </DropdownMenuContent>
-        </DropdownMenu>
+                </SidebarMenuButton>
+            </div>
+        )}
       </SidebarFooter>
     </>
   );
