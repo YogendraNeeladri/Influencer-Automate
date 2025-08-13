@@ -74,6 +74,8 @@ const profileSchema = z.object({
 });
 
 export async function updateProfile(prevState: any, formData: FormData) {
+    await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate network delay
+    
     const validatedFields = profileSchema.safeParse({
         name: formData.get('name'),
         email: formData.get('email'),
@@ -83,11 +85,16 @@ export async function updateProfile(prevState: any, formData: FormData) {
     if (!validatedFields.success) {
         return {
             error: Object.values(validatedFields.error.flatten().fieldErrors).flat()[0] || 'Invalid input.',
+            message: '',
         };
     }
 
     // In a real app, you'd save this to a database.
     console.log('Profile updated:', validatedFields.data);
 
-    return { message: 'Profile updated successfully!' };
+    return { 
+        message: 'Profile updated successfully!',
+        error: '',
+        data: validatedFields.data,
+     };
 }

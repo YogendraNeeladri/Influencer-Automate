@@ -9,27 +9,27 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { updateProfile } from '@/lib/actions';
 import { useToast } from '@/hooks/use-toast';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { SubmitButton } from '@/components/profile/submit-button';
 
 const initialState = {
     message: '',
     error: '',
+    data: null,
 };
 
 export default function ProfilePage() {
     const { toast } = useToast();
     const [state, formAction] = useFormState(updateProfile, initialState);
-    const formRef = useRef<HTMLFormElement>(null);
     
     // In a real application, you would fetch this data from your authentication provider.
-    const user = {
+    const [user, setUser] = useState({
         name: 'Yogi',
         email: 'yogi@example.com',
         avatar: 'https://placehold.co/80x80.png',
         fallback: 'Y',
         bio: 'Marketing Manager at Influencer Automate.',
-    };
+    });
 
     useEffect(() => {
         if (state?.error) {
@@ -44,6 +44,9 @@ export default function ProfilePage() {
                 title: "Success",
                 description: state.message,
             });
+            if (state.data) {
+                setUser(prevUser => ({...prevUser, ...state.data}));
+            }
         }
     }, [state, toast]);
 
@@ -57,22 +60,22 @@ export default function ProfilePage() {
                     <CardDescription>Update your personal details here.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <form ref={formRef} action={formAction} className="space-y-6">
+                    <form action={formAction} className="space-y-6">
                         <div className="flex items-center space-x-4">
                             <Avatar className="w-20 h-20">
                                 <AvatarImage src={user.avatar} alt={user.name} data-ai-hint="person" />
-                                <AvatarFallback>{user.fallback}</AvatarFallback>
+                                <AvatarFallback>{user.name.charAt(0).toUpperCase()}</AvatarFallback>
                             </Avatar>
                             <Button variant="outline" type="button">Change Photo</Button>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="name">Name</Label>
-                                <Input id="name" name="name" defaultValue={user.name} />
+                                <Input id="name" name="name" defaultValue={user.name} key={user.name} />
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="email">Email</Label>
-                                <Input id="email" name="email" type="email" defaultValue={user.email} />
+                                <Input id="email" name="email" type="email" defaultValue={user.email} key={user.email} />
                             </div>
                         </div>
                          <div className="space-y-2">
@@ -83,6 +86,7 @@ export default function ProfilePage() {
                                 className="flex min-h-[80px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                                 placeholder="Tell us a little about yourself"
                                 defaultValue={user.bio}
+                                key={user.bio}
                             />
                         </div>
                         <SubmitButton />
