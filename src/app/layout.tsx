@@ -1,12 +1,7 @@
-// We need a client component to use usePathname
-'use client';
-
 import type { Metadata } from 'next';
 import './globals.css';
-import { SidebarProvider, Sidebar, SidebarInset } from '@/components/ui/sidebar';
-import { AppSidebarContent } from '@/components/layout/app-sidebar';
 import { Toaster } from '@/components/ui/toaster';
-import { usePathname } from 'next/navigation';
+import { LayoutProvider } from '@/components/layout/layout-provider';
 
 export const metadata: Metadata = {
   title: 'Influencer Automate',
@@ -30,22 +25,5 @@ export default function RootLayout({
         <Toaster />
       </body>
     </html>
-  );
-}
-
-function LayoutProvider({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
-
-  if (pathname === '/login') {
-    return <>{children}</>;
-  }
-
-  return (
-    <SidebarProvider>
-      <Sidebar>
-        <AppSidebarContent />
-      </Sidebar>
-      <SidebarInset>{children}</SidebarInset>
-    </SidebarProvider>
   );
 }
