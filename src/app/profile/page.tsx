@@ -12,6 +12,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useEffect } from 'react';
 import { SubmitButton } from '@/components/profile/submit-button';
 import { useUser } from '@/context/user-context';
+import { Textarea } from '@/components/ui/textarea';
 
 const initialState = {
     message: '',
@@ -55,6 +56,13 @@ export default function ProfilePage() {
         )
     }
 
+    const handlePhotoChange = () => {
+        // In a real app, this would open a file picker and upload a new image.
+        // For this demo, we'll just cycle through some placeholders.
+        const newAvatar = `https://placehold.co/80x80.png?text=${user.name.charAt(0)}`;
+        updateUser({ avatar: newAvatar });
+    };
+
     return (
         <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
             <h2 className="text-3xl font-bold tracking-tight">Profile</h2>
@@ -68,9 +76,9 @@ export default function ProfilePage() {
                         <div className="flex items-center space-x-4">
                             <Avatar className="w-20 h-20">
                                 <AvatarImage src={user.avatar} alt={user.name} data-ai-hint="person" />
-                                <AvatarFallback>{user.name.charAt(0).toUpperCase()}</AvatarFallback>
+                                <AvatarFallback>{user.fallback}</AvatarFallback>
                             </Avatar>
-                            <Button variant="outline" type="button">Change Photo</Button>
+                            <Button variant="outline" type="button" onClick={handlePhotoChange}>Change Photo</Button>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-2">
@@ -84,10 +92,9 @@ export default function ProfilePage() {
                         </div>
                          <div className="space-y-2">
                             <Label htmlFor="bio">Bio</Label>
-                            <textarea
+                            <Textarea
                                 id="bio"
                                 name="bio"
-                                className="flex min-h-[80px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                                 placeholder="Tell us a little about yourself"
                                 defaultValue={user.bio}
                                 key={user.bio}

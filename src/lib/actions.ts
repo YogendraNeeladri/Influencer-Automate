@@ -17,6 +17,7 @@ export async function getAnalysisSummary(prevState: any, formData: FormData) {
   if (!validatedFields.success) {
     return {
       error: validatedFields.error.flatten().fieldErrors.content?.[0] || 'Invalid input.',
+      summary: '',
     };
   }
 
@@ -24,10 +25,10 @@ export async function getAnalysisSummary(prevState: any, formData: FormData) {
     const result = await summarizeContentAnalysis({
       contentAnalysis: validatedFields.data.content,
     });
-    return { summary: result.summary };
+    return { summary: result.summary, error: '' };
   } catch (e) {
     console.error(e);
-    return { error: 'Failed to generate summary. Please try again.' };
+    return { error: 'Failed to generate summary. Please try again.', summary: '' };
   }
 }
 
@@ -47,6 +48,7 @@ export async function getOutreachMessage(prevState: any, formData: FormData) {
     if (!validatedFields.success) {
         return {
             error: Object.values(validatedFields.error.flatten().fieldErrors).flat()[0] || 'Invalid input.',
+            message: '',
         };
     }
     
@@ -60,10 +62,10 @@ export async function getOutreachMessage(prevState: any, formData: FormData) {
             influencerProfileData: mockProfileData,
             contentAnalysisSummary: mockContentSummary,
         });
-        return { message: result.outreachMessage };
+        return { message: result.outreachMessage, error: '' };
     } catch (e) {
         console.error(e);
-        return { error: 'Failed to generate message. Please try again.' };
+        return { error: 'Failed to generate message. Please try again.', message: '' };
     }
 }
 
@@ -98,7 +100,9 @@ export async function updateProfile(prevState: any, formData: FormData) {
         error: '',
         data: {
             ...validatedFields.data,
-            fallback: validatedFields.data.name.charAt(0).toUpperCase()
+            avatar: `https://placehold.co/80x80.png?text=${validatedFields.data.name.charAt(0)}`,
+            fallback: validatedFields.data.name.charAt(0).toUpperCase(),
+            bio: validatedFields.data.bio || '',
         },
      };
 }
