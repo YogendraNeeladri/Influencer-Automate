@@ -24,10 +24,10 @@ export default function ProfilePage() {
     
     // In a real application, you would fetch this data from your authentication provider.
     const user = {
-        name: 'Jane Doe',
-        email: 'jane.doe@example.com',
+        name: 'Yogi',
+        email: 'yogi@example.com',
         avatar: 'https://placehold.co/80x80.png',
-        fallback: 'JD',
+        fallback: 'Y',
         bio: 'Marketing Manager at Influencer Automate.',
     };
 
