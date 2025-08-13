@@ -1,7 +1,8 @@
 
 'use client';
 
-import { useActionState, useFormStatus } from 'react';
+import { useActionState } from 'react';
+import { useFormStatus } from 'react-dom';
 import { getOutreachMessage } from '@/lib/actions';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -29,8 +30,7 @@ function SubmitButton() {
 }
 
 export function OutreachForm() {
-  const [state, formAction] = useActionState(getOutreachMessage, initialState);
-  const { pending } = useFormStatus();
+  const [state, formAction, pending] = useActionState(getOutreachMessage, initialState);
   const { toast } = useToast();
   const formRef = useRef<HTMLFormElement>(null);
   
