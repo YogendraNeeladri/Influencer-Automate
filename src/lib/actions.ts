@@ -1,3 +1,4 @@
+
 'use server';
 
 import { generateOutreachMessage } from '@/ai/flows/generate-outreach-message';
@@ -64,4 +65,29 @@ export async function getOutreachMessage(prevState: any, formData: FormData) {
         console.error(e);
         return { error: 'Failed to generate message. Please try again.' };
     }
+}
+
+const profileSchema = z.object({
+    name: z.string().min(1, 'Name is required.'),
+    email: z.string().email('Invalid email address.'),
+    bio: z.string().optional(),
+});
+
+export async function updateProfile(prevState: any, formData: FormData) {
+    const validatedFields = profileSchema.safeParse({
+        name: formData.get('name'),
+        email: formData.get('email'),
+        bio: formData.get('bio'),
+    });
+
+    if (!validatedFields.success) {
+        return {
+            error: Object.values(validatedFields.error.flatten().fieldErrors).flat()[0] || 'Invalid input.',
+        };
+    }
+
+    // In a real app, you'd save this to a database.
+    console.log('Profile updated:', validatedFields.data);
+
+    return { message: 'Profile updated successfully!' };
 }
